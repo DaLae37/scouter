@@ -1,10 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>io.github.scouter-project</groupId>
         <artifactId>scouter-parent</artifactId>
-        <version>2.21.2</version> <!--scouter-->
+        <version>2.21.3</version> <!--scouter-->
     </parent>
 
     <artifactId>scouter-agent-host</artifactId>
@@ -43,17 +45,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <compilerVersion>1.8</compilerVersion>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.4.1</version>
                 <configuration>
                     <excludes>
                         <exclude name="**/scouter/boot/**" />
@@ -63,7 +65,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -90,7 +92,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>make-boot-jar</id>
@@ -125,8 +127,10 @@
                                         <include name="**/*" />
                                     </fileset>
                                 </copy>
-                                <fixcrlf srcdir="${scouter.assembly.working.dir}" includes="**/*.sh" eol="lf" eof="remove" />
-                                <tar destfile="${project.build.directory}/${scouter.agent.host.assembly.name}.tar">
+                                <fixcrlf srcdir="${scouter.assembly.working.dir}" includes="**/*.sh"
+                                    eol="lf" eof="remove" />
+                                <tar
+                                    destfile="${project.build.directory}/${scouter.agent.host.assembly.name}.tar">
                                     <tarfileset dir="${scouter.assembly.working.dir}" mode="755">
                                         <include name="**/*.sh" />
                                     </tarfileset>
@@ -143,7 +147,9 @@
 
                                 <!-- copy for preparing whole packaging -->
                                 <mkdir dir="${scouter.whole.packaging.prepare.dir}" />
-                                <copy file="${project.build.directory}/${scouter.agent.host.assembly.name}.tar" todir="${scouter.whole.packaging.prepare.dir}" />
+                                <copy
+                                    file="${project.build.directory}/${scouter.agent.host.assembly.name}.tar"
+                                    todir="${scouter.whole.packaging.prepare.dir}" />
                             </target>
                         </configuration>
                         <goals>

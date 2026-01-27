@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>io.github.scouter-project</groupId>
         <artifactId>scouter-parent</artifactId>
-        <version>2.21.2</version> <!--scouter-->
+        <version>2.21.3</version> <!--scouter-->
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -45,14 +47,14 @@
         </dependency>
         <!-- dependencies for native jetty websocket -->
         <!--<dependency>-->
-            <!--<groupId>org.eclipse.jetty.websocket</groupId>-->
-            <!--<artifactId>websocket-server</artifactId>-->
-            <!--<version>${jetty.version}</version>-->
+        <!--<groupId>org.eclipse.jetty.websocket</groupId>-->
+        <!--<artifactId>websocket-server</artifactId>-->
+        <!--<version>${jetty.version}</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>org.eclipse.jetty.websocket</groupId>-->
-            <!--<artifactId>websocket-servlet</artifactId>-->
-            <!--<version>${jetty.version}</version>-->
+        <!--<groupId>org.eclipse.jetty.websocket</groupId>-->
+        <!--<artifactId>websocket-servlet</artifactId>-->
+        <!--<version>${jetty.version}</version>-->
         <!--</dependency>-->
         <!-- dependencies for javax.websocket (JSR-356) websocket -->
         <dependency>
@@ -113,7 +115,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
+            <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -197,16 +199,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.4.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -229,72 +232,79 @@
                 </executions>
             </plugin>
             <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-shade-plugin</artifactId>-->
-                <!--<version>2.4.3</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>shade</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<shadedArtifactAttached>false</shadedArtifactAttached>-->
-                            <!--<createDependencyReducedPom>true</createDependencyReducedPom>-->
-                            <!--<createSourcesJar>true</createSourcesJar>-->
-                            <!--<shadeSourcesContent>true</shadeSourcesContent>-->
-                            <!--<filters>-->
-                                <!--<filter>-->
-                                    <!--<artifact>io.github.scouter-project:scouter-common</artifact>-->
-                                    <!--<excludes>-->
-                                        <!--<exclude>scouter/v.properties</exclude>-->
-                                    <!--</excludes>-->
-                                <!--</filter>-->
-                            <!--</filters>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-shade-plugin</artifactId>-->
+            <!--<version>2.4.3</version>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<phase>package</phase>-->
+            <!--<goals>-->
+            <!--<goal>shade</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+            <!--<shadedArtifactAttached>false</shadedArtifactAttached>-->
+            <!--<createDependencyReducedPom>true</createDependencyReducedPom>-->
+            <!--<createSourcesJar>true</createSourcesJar>-->
+            <!--<shadeSourcesContent>true</shadeSourcesContent>-->
+            <!--<filters>-->
+            <!--<filter>-->
+            <!--<artifact>io.github.scouter-project:scouter-common</artifact>-->
+            <!--<excludes>-->
+            <!--<exclude>scouter/v.properties</exclude>-->
+            <!--</excludes>-->
+            <!--</filter>-->
+            <!--</filters>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--</executions>-->
             <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>make-assembly</id>
                         <phase>package</phase>
                         <configuration>
                             <target>
-                                <mkdir dir="${scouter.assembly.working.dir}"/>
+                                <mkdir dir="${scouter.assembly.working.dir}" />
                                 <copy todir="${scouter.assembly.working.dir}">
                                     <fileset dir="${project.basedir}/scripts">
-                                        <include name="**/*"/>
+                                        <include name="**/*" />
                                     </fileset>
                                 </copy>
-                                <copy file="${project.build.directory}/${project.build.finalName}.jar" tofile="${project.build.directory}/${scouter.webapp.jarName}.jar" overwrite="true" verbose="true"/>
+                                <copy
+                                    file="${project.build.directory}/${project.build.finalName}.jar"
+                                    tofile="${project.build.directory}/${scouter.webapp.jarName}.jar"
+                                    overwrite="true" verbose="true" />
 
-                                <fixcrlf srcdir="${scouter.assembly.working.dir}" includes="**/*.sh" eol="lf" eof="remove"/>
-                                <tar destfile="${project.build.directory}/${scouter.webapp.assembly.name}.tar">
+                                <fixcrlf srcdir="${scouter.assembly.working.dir}" includes="**/*.sh"
+                                    eol="lf" eof="remove" />
+                                <tar
+                                    destfile="${project.build.directory}/${scouter.webapp.assembly.name}.tar">
                                     <tarfileset dir="${scouter.assembly.working.dir}" mode="755">
-                                        <include name="**/*.sh"/>
+                                        <include name="**/*.sh" />
                                     </tarfileset>
                                     <tarfileset dir="${scouter.assembly.working.dir}">
-                                        <exclude name="**/*.sh"/>
+                                        <exclude name="**/*.sh" />
                                     </tarfileset>
                                     <tarfileset dir="${project.build.directory}">
-                                        <include name="${project.build.finalName}.jar"/>
-                                        <include name="${scouter.webapp.jarName}.jar"/>
-                                        <include name="lib/**/*"/>
+                                        <include name="${project.build.finalName}.jar" />
+                                        <include name="${scouter.webapp.jarName}.jar" />
+                                        <include name="lib/**/*" />
                                     </tarfileset>
                                     <tarfileset dir="${project.basedir}">
-                                        <include name="conf/**/*"/>
-                                        <include name="extweb/**/*"/>
+                                        <include name="conf/**/*" />
+                                        <include name="extweb/**/*" />
                                     </tarfileset>
                                 </tar>
 
                                 <!-- copy for preparing whole packaging -->
-                                <mkdir dir="${scouter.whole.packaging.prepare.dir}"/>
-                                <copy file="${project.build.directory}/${scouter.webapp.assembly.name}.tar" todir="${scouter.whole.packaging.prepare.dir}"/>
+                                <mkdir dir="${scouter.whole.packaging.prepare.dir}" />
+                                <copy
+                                    file="${project.build.directory}/${scouter.webapp.assembly.name}.tar"
+                                    todir="${scouter.whole.packaging.prepare.dir}" />
                             </target>
                         </configuration>
                         <goals>

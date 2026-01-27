@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.scouter-project</groupId>
     <artifactId>scouter-parent</artifactId>
-    <version>2.21.2</version> <!--scouter-->
+    <version>2.21.3</version> <!--scouter-->
     <packaging>pom</packaging>
 
     <name>SCOUTER APM</name>
@@ -39,23 +41,27 @@
         <scouter.product.name>scouter-all-${project.version}</scouter.product.name>
         <scouter.product.min.name>scouter-min-${project.version}</scouter.product.min.name>
 
-        <jetty.version>9.4.6.v20170531</jetty.version>
+        <java.version>21</java.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <scala.version>2.13.18</scala.version>
+
+        <jetty.version>9.4.53.v20231009</jetty.version>
         <jersey.version>2.27</jersey.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.13</logback.version>
     </properties>
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>local-maven-repo</id>-->
-<!--            <url>file:///${project.basedir}/../local-maven-repo</url>-->
-<!--        </repository>-->
-<!--        <repository>-->
-<!--            <id>redhat.com</id>-->
-<!--            <name>redhat maven Repository</name>-->
-<!--            <url>https://maven.repository.redhat.com/ga</url>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>local-maven-repo</id>-->
+    <!--            <url>file:///${project.basedir}/../local-maven-repo</url>-->
+    <!--        </repository>-->
+    <!--        <repository>-->
+    <!--            <id>redhat.com</id>-->
+    <!--            <name>redhat maven Repository</name>-->
+    <!--            <url>https://maven.repository.redhat.com/ga</url>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
 
     <licenses>
         <license>
@@ -96,17 +102,46 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[1.0.0,)</versionRange>
+                                        <goals>
+                                            <goal>copy-dependencies</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.13.0</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12.1</version>
+                    <version>3.2.5</version>
                     <configuration>
                         <skipTests>true</skipTests>
                     </configuration>
-      	        </plugin>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.3.0</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -119,6 +154,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.6.3</version>
                     <configuration>
                         <additionalJOption>-Xdoclint:none</additionalJOption>
                     </configuration>
@@ -134,7 +170,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
-                    <version>1.5</version>
+                    <version>3.2.0</version>
                     <executions>
                         <execution>
                             <id>sign-artifacts</id>
@@ -150,12 +186,15 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.5.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

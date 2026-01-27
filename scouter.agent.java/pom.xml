@@ -1,10 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>io.github.scouter-project</groupId>
         <artifactId>scouter-parent</artifactId>
-        <version>2.21.2</version> <!--scouter-->
+        <version>2.21.3</version> <!--scouter-->
     </parent>
 
     <artifactId>scouter-agent-java</artifactId>
@@ -35,9 +37,8 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.1</version>
+                        <version>3.13.0</version>
                         <configuration>
-                            <compilerVersion>${java.version}</compilerVersion>
                             <source>${java.version}</source>
                             <target>${java.version}</target>
                             <fork>true</fork>
@@ -46,7 +47,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>3.6.3</version>
                         <configuration>
                         </configuration>
                     </plugin>
@@ -72,11 +73,11 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.1</version>
+                        <version>3.13.0</version>
                         <configuration>
-                            <compilerVersion>${java.version}</compilerVersion>
                             <source>${java.version}</source>
                             <target>${java.version}</target>
+                            <release>${java.version}</release>
                             <fork>true</fork>
                             <executable>${env.JAVA_21_HOME}/bin/javac</executable>
                             <compilerArgs>
@@ -90,7 +91,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>3.6.3</version>
                         <configuration>
                             <javadocExecutable>${env.JAVA_21_HOME}/bin/javadoc</javadocExecutable>
                         </configuration>
@@ -136,7 +137,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.4.1</version>
                 <configuration>
                     <archive>
                         <manifestEntries>
@@ -157,9 +158,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <compilerVersion>${java.version}</compilerVersion>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
@@ -167,7 +167,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.6.3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -209,7 +209,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>make-ext-jar</id>
@@ -285,16 +285,21 @@
                                     <zipfileset src="${final.jar.name}" />
 
                                     <manifest>
-                                        <attribute name="Premain-Class" value="scouter.agent.JavaAgent" />
-                                        <attribute name="Agent-Class" value="scouter.agent.JavaAgent" />
+                                        <attribute name="Premain-Class"
+                                            value="scouter.agent.JavaAgent" />
+                                        <attribute name="Agent-Class"
+                                            value="scouter.agent.JavaAgent" />
                                         <attribute name="Can-Redefine-Classes" value="true" />
                                         <attribute name="Can-Retransform-Classes" value="true" />
-                                        <attribute name="Boot-Class-Path" value="${project.build.finalName}.jar" />
+                                        <attribute name="Boot-Class-Path"
+                                            value="${project.build.finalName}.jar" />
                                     </manifest>
                                 </jar>
 
-                                <copy file="${final.jar.name}" tofile="${final.jar.name.shade}" overwrite="true" verbose="true" />
-                                <copy file="${final.jar.name.xtra}" tofile="${final.jar.name}" overwrite="true" verbose="true" />
+                                <copy file="${final.jar.name}" tofile="${final.jar.name.shade}"
+                                    overwrite="true" verbose="true" />
+                                <copy file="${final.jar.name.xtra}" tofile="${final.jar.name}"
+                                    overwrite="true" verbose="true" />
                                 <delete file="${project.build.directory}/${scouter.http.jar}" />
                                 <delete file="${project.build.directory}/${scouter.jdbc.jar}" />
                                 <delete file="${project.build.directory}/${scouter.httpclient.jar}" />
@@ -305,26 +310,34 @@
                                 <delete file="${project.build.directory}/${scouter.java8.jar}" />
 
                                 <!-- for constant name file -->
-                                <jar destfile="${project.build.directory}/${scouter.agent.file.name}">
+                                <jar
+                                    destfile="${project.build.directory}/${scouter.agent.file.name}">
                                     <zipfileset src="${final.jar.name}" />
                                     <manifest>
-                                        <attribute name="Premain-Class" value="scouter.agent.JavaAgent" />
-                                        <attribute name="Agent-Class" value="scouter.agent.JavaAgent" />
+                                        <attribute name="Premain-Class"
+                                            value="scouter.agent.JavaAgent" />
+                                        <attribute name="Agent-Class"
+                                            value="scouter.agent.JavaAgent" />
                                         <attribute name="Can-Redefine-Classes" value="true" />
                                         <attribute name="Can-Retransform-Classes" value="true" />
-                                        <attribute name="Boot-Class-Path" value="${scouter.agent.file.name}" />
+                                        <attribute name="Boot-Class-Path"
+                                            value="${scouter.agent.file.name}" />
                                     </manifest>
                                 </jar>
 
                                 <!-- for min file -->
-                                <jar destfile="${project.build.directory}/${scouter.agent.min.file.name}">
-                                    <zipfileset src="${final.jar.name}"/>
+                                <jar
+                                    destfile="${project.build.directory}/${scouter.agent.min.file.name}">
+                                    <zipfileset src="${final.jar.name}" />
                                     <manifest>
-                                        <attribute name="Premain-Class" value="scouter.agent.JavaAgent" />
-                                        <attribute name="Agent-Class" value="scouter.agent.JavaAgent" />
+                                        <attribute name="Premain-Class"
+                                            value="scouter.agent.JavaAgent" />
+                                        <attribute name="Agent-Class"
+                                            value="scouter.agent.JavaAgent" />
                                         <attribute name="Can-Redefine-Classes" value="true" />
                                         <attribute name="Can-Retransform-Classes" value="true" />
-                                        <attribute name="Boot-Class-Path" value="${scouter.agent.file.name}" />
+                                        <attribute name="Boot-Class-Path"
+                                            value="${scouter.agent.file.name}" />
                                     </manifest>
                                 </jar>
 
@@ -339,7 +352,8 @@
                         <phase>package</phase>
                         <configuration>
                             <target>
-                                <tar destfile="${project.build.directory}/${scouter.agent.java.assembly.name.p}.tar">
+                                <tar
+                                    destfile="${project.build.directory}/${scouter.agent.java.assembly.name.p}.tar">
                                     <tarfileset dir="${project.basedir}">
                                         <include name="conf/**/*" />
                                     </tarfileset>
@@ -354,7 +368,9 @@
                                 </tar>
                                 <!-- copy for preparing whole packaging -->
                                 <mkdir dir="${scouter.whole.packaging.prepare.dir}" />
-                                <copy file="${project.build.directory}/${scouter.agent.java.assembly.name.p}.tar" todir="${scouter.whole.packaging.prepare.dir}" />
+                                <copy
+                                    file="${project.build.directory}/${scouter.agent.java.assembly.name.p}.tar"
+                                    todir="${scouter.whole.packaging.prepare.dir}" />
                             </target>
                         </configuration>
                         <goals>
@@ -375,33 +391,17 @@
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>9.8</version>
+            <version>9.7</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm-commons</artifactId>
-            <version>9.8</version>
+            <version>9.7</version>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>3.29.2-GA</version>
-        </dependency>
-
-        <!-- local lib -->
-        <dependency>
-            <groupId>jdk.tools</groupId>
-            <artifactId>jdk.tools</artifactId>
-            <version>tools-0.0.0</version>
-            <scope>system</scope>
-            <systemPath>${provided.tools.jar}</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>java.net.http</groupId>
-            <artifactId>jdk11-httpclient</artifactId>
-            <version>0.0.0</version>
-            <scope>system</scope>
-            <systemPath>${java.net.http.jar}</systemPath>
         </dependency>
 
         <!-- provided -->
@@ -542,9 +542,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
-
-
-
 </project>

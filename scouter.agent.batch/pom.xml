@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>io.github.scouter-project</groupId>
         <artifactId>scouter-parent</artifactId>
-        <version>2.21.2</version> <!--scouter-->
+        <version>2.21.3</version> <!--scouter-->
     </parent>
 
     <artifactId>scouter-agent-batch</artifactId>
@@ -28,13 +29,13 @@
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>7.0</version>
+            <version>9.7</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm-commons</artifactId>
-            <version>7.0</version>
-        </dependency>        
+            <version>9.7</version>
+        </dependency>
         <dependency>
             <groupId>io.github.scouter-project</groupId>
             <artifactId>scouter-common</artifactId>
@@ -66,17 +67,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <compilerVersion>1.6</compilerVersion>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.4.1</version>
                 <configuration>
                     <archive>
                         <manifestEntries>
@@ -95,7 +96,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -120,7 +121,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>make-ext-jar</id>
@@ -137,58 +138,66 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>                
+                    </execution>
                     <execution>
                         <id>make-assembly</id>
                         <phase>package</phase>
                         <configuration>
                             <target>
-                            	<!-- for constant name file -->
-                                <jar destfile="${project.build.directory}/${scouter.agent.file.name}">
+                                <!-- for constant name file -->
+                                <jar
+                                    destfile="${project.build.directory}/${scouter.agent.file.name}">
                                     <fileset dir="${project.build.directory}">
                                         <include name="${scouter.tools.jar}" />
                                     </fileset>
-                                    <zipfileset src="${final.jar.name}"/>
+                                    <zipfileset src="${final.jar.name}" />
                                     <manifest>
-                                        <attribute name="Premain-Class" value="scouter.agent.batch.JavaAgent"/>
-                                        <attribute name="Agent-Class" value="scouter.agent.batch.JavaAgent"/>
-                                        <attribute name="Can-Redefine-Classes" value="true"/>
-                                        <attribute name="Can-Retransform-Classes" value="true"/>
-                                        <attribute name="Boot-Class-Path" value="${scouter.agent.file.name}"/>
+                                        <attribute name="Premain-Class"
+                                            value="scouter.agent.batch.JavaAgent" />
+                                        <attribute name="Agent-Class"
+                                            value="scouter.agent.batch.JavaAgent" />
+                                        <attribute name="Can-Redefine-Classes" value="true" />
+                                        <attribute name="Can-Retransform-Classes" value="true" />
+                                        <attribute name="Boot-Class-Path"
+                                            value="${scouter.agent.file.name}" />
                                     </manifest>
                                 </jar>
 
-                                <mkdir dir="${scouter.assembly.working.dir}"/>
+                                <mkdir dir="${scouter.assembly.working.dir}" />
                                 <copy todir="${scouter.assembly.working.dir}">
                                     <fileset dir="${project.basedir}/scripts">
-                                        <include name="**/*"/>
+                                        <include name="**/*" />
                                     </fileset>
                                 </copy>
-                                <fixcrlf srcdir="${scouter.assembly.working.dir}" includes="**/*.sh" eol="lf"
-                                         eof="remove"/>
+                                <fixcrlf srcdir="${scouter.assembly.working.dir}" includes="**/*.sh"
+                                    eol="lf"
+                                    eof="remove" />
 
-                                <copy file="${project.build.directory}/${scouter.tools.jar}" tofile="${final.jar.name}" overwrite="true" verbose="true" />
-                                <delete file="${project.build.directory}/${scouter.tools.jar}"/>
-                                        
-                                <tar destfile="${project.build.directory}/${scouter.agent.batch.assembly.name}.tar">
+                                <copy file="${project.build.directory}/${scouter.tools.jar}"
+                                    tofile="${final.jar.name}" overwrite="true" verbose="true" />
+                                <delete file="${project.build.directory}/${scouter.tools.jar}" />
+
+                                <tar
+                                    destfile="${project.build.directory}/${scouter.agent.batch.assembly.name}.tar">
                                     <tarfileset dir="${scouter.assembly.working.dir}" mode="755">
-                                        <include name="**/*.sh"/>
+                                        <include name="**/*.sh" />
                                     </tarfileset>
                                     <tarfileset dir="${scouter.assembly.working.dir}">
-                                        <exclude name="**/*.sh"/>
+                                        <exclude name="**/*.sh" />
                                     </tarfileset>
                                     <tarfileset dir="${project.basedir}">
-                                        <include name="conf/**/*"/>
+                                        <include name="conf/**/*" />
                                     </tarfileset>
                                     <tarfileset dir="${project.build.directory}">
-                                        <include name="${project.build.finalName}.jar"/>
-                                        <include name="${scouter.agent.file.name}"/>
+                                        <include name="${project.build.finalName}.jar" />
+                                        <include name="${scouter.agent.file.name}" />
                                     </tarfileset>
                                 </tar>
                                 <!-- copy for preparing whole packaging -->
-                                <mkdir dir="${scouter.whole.packaging.prepare.dir}"/>
-                                <copy file="${project.build.directory}/${scouter.agent.batch.assembly.name}.tar"
-                                      todir="${scouter.whole.packaging.prepare.dir}"/>
+                                <mkdir dir="${scouter.whole.packaging.prepare.dir}" />
+                                <copy
+                                    file="${project.build.directory}/${scouter.agent.batch.assembly.name}.tar"
+                                    todir="${scouter.whole.packaging.prepare.dir}" />
                             </target>
                         </configuration>
                         <goals>
