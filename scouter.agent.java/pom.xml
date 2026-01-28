@@ -18,7 +18,7 @@
         <profile>
             <id>java-8-plus</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <env>java8plus</env>
@@ -56,6 +56,9 @@
         </profile>
         <profile>
             <id>java-21-plus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <env>java21plus</env>
                 <java.version>21</java.version>
@@ -77,10 +80,10 @@
                         <configuration>
                             <source>${java.version}</source>
                             <target>${java.version}</target>
-                            <release>${java.version}</release>
                             <fork>true</fork>
-                            <executable>${env.JAVA_21_HOME}/bin/javac</executable>
                             <compilerArgs>
+                                <arg>--add-exports</arg>
+                                <arg>jdk.attach/sun.tools.attach=ALL-UNNAMED</arg>
                                 <arg>--add-exports</arg>
                                 <arg>java.base/sun.net.www.http=ALL-UNNAMED</arg>
                                 <arg>--add-exports</arg>
@@ -160,8 +163,14 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
+                    <release combine.self="override"></release>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <compilerArgs>
+                        <arg>--add-exports=jdk.attach/sun.tools.attach=ALL-UNNAMED</arg>
+                        <arg>--add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED</arg>
+                        <arg>--add-exports=java.base/sun.net.www.http=ALL-UNNAMED</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
