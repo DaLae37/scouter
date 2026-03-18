@@ -16,7 +16,6 @@
 
     <properties>
         <scouter.extra.java11.jarName>scouter.weaver</scouter.extra.java11.jarName>
-        <maven.compiler.release>21</maven.compiler.release>
     </properties>
 
     <build>
@@ -26,25 +25,5 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>21</source>
-                    <target>21</target>
-                    <compilerVersion>21</compilerVersion>
-                    <fork>true</fork>
-                    <executable>${JAVA_21_HOME}/bin/javac</executable>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <javadocExecutable>${JAVA_21_HOME}/bin/javadoc</javadocExecutable>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>

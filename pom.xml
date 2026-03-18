@@ -24,7 +24,6 @@
         <module>scouter.agent.host</module>
         <module>scouter.agent.java</module>
         <module>scouter.agent.batch</module>
-        <module>scouter.extra.java20</module>
         <module>scouter.extra.java20dummy</module>
     </modules>
 
@@ -90,7 +89,7 @@
 
     <profiles>
         <profile>
-            <id>jdk-8</id>
+            <id>java-8-plus</id>
             <activation>
                 <jdk>1.8</jdk>
                 <activeByDefault>true</activeByDefault>
@@ -102,15 +101,17 @@
         </profile>
 
         <profile>
-            <id>jdk-21</id>
+            <id>java-21-plus</id>
             <activation>
                 <jdk>[21,)</jdk>
             </activation>
             <properties>
                 <maven.compiler.source>21</maven.compiler.source>
                 <maven.compiler.target>21</maven.compiler.target>
-                <maven.compiler.release>21</maven.compiler.release>
             </properties>
+            <modules>
+                <module>scouter.extra.java20</module>
+            </modules>
         </profile>
     </profiles>
 
@@ -466,6 +467,7 @@
                     <version>3.6.3</version>
                     <configuration>
                         <doclint>none</doclint>
+                        <failOnError>false</failOnError>
                     </configuration>
                     <executions>
                         <execution>
