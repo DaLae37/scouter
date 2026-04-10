@@ -24,16 +24,14 @@ if [ -z "$JAVA_VER" ]; then
     exit 1
 fi
 
-if [ "$JAVA_VER" -ge 8 ]; then
-    echo "JDK 8+ detected. Building java-8-plus profile"
-    $MVN -Dmaven.test.skip=true clean install
-    $MVN -Dmaven.test.skip=true -f ./scouter.agent.java/pom.xml -Pjava-8-plus package
-else
-    echo "Scouter requires at least JDK 8."
-    exit 1
-fi
+$MVN -Dmaven.test.skip=true clean install
 
-if [ "$JAVA_VER" -ge 21 ]; then
+# 8 이상 21 미만인 경우 (JDK 8+ 프로필)
+if [ "$JAVA_VER" -ge 8 ] && [ "$JAVA_VER" -lt 21 ]; then
+    echo "JDK 8~20 detected. Building java-8-plus profile"
+    $MVN -Dmaven.test.skip=true -f ./scouter.agent.java/pom.xml -Pjava-8-plus package
+# 21 이상인 경우 (JDK 21+ 프로필)
+elif [ "$JAVA_VER" -ge 21 ]; then
     echo "JDK 21+ detected. Building java-21-plus profile"
     $MVN -Dmaven.test.skip=true -f ./scouter.agent.java/pom.xml -Pjava-21-plus package
 fi
