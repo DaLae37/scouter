@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>scouter-agent-java</artifactId>
+    <version>2.21.4.1</version>
     <packaging>jar</packaging>
     <name>scouter.agent.java</name>
 
@@ -29,6 +30,7 @@
                 <dependency>
                     <groupId>io.github.scouter-project</groupId>
                     <artifactId>scouter-extra-java20dummy</artifactId>
+                    <version>2.21.4</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -46,6 +48,7 @@
                 <dependency>
                     <groupId>io.github.scouter-project</groupId>
                     <artifactId>scouter-extra-java20</artifactId>
+                    <version>2.21.4</version>
                 </dependency>
             </dependencies>
             <build>
@@ -325,6 +328,7 @@
         <dependency>
             <groupId>io.github.scouter-project</groupId>
             <artifactId>scouter-common</artifactId>
+            <version>2.21.4</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>

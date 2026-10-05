@@ -794,6 +794,48 @@ public class Configure extends Thread {
     @ConfigDesc("Reject URL")
     public String control_reject_redirect_url = "/error.html";
 
+    //Control - duplicated client ip
+    @ConfigDesc("Activating reject of duplicated request from the same client ip")
+    public boolean control_reject_duplicated_ip_enabled = false;
+    @ConfigDesc("Distinguish duplication by (ip + service url).\n If false, it is judged by client ip only.")
+    public boolean control_reject_duplicated_ip_url_enabled = true;
+    @ConfigDesc("Reject the same request re-called within this interval(ms). 0 to disable this rule.")
+    public int control_reject_duplicated_ip_interval_ms = 1000;
+    @ConfigDesc("Reject the same request while the previous one is still being processed")
+    public boolean control_reject_duplicated_ip_concurrent_enabled = true;
+    @ConfigDesc("Allowed concurrent count of the same request before rejecting")
+    public int control_reject_duplicated_ip_max_concurrent_count = 1;
+    @ConfigDesc("Activating call-rate based reject of the same request")
+    public boolean control_reject_duplicated_ip_rate_enabled = false;
+    @ConfigDesc("Counting window(ms) of the call-rate rule.\n The window starts at the first call and rolls over when elapsed.")
+    public int control_reject_duplicated_ip_rate_window_ms = 10000;
+    @ConfigDesc("Reject when the call count within the window reaches this count.\n ex) window=10000, count=300 -> the 300th call within 10s is the first rejected one.")
+    public int control_reject_duplicated_ip_rate_max_count = 300;
+    @ConfigDesc("Keep rejecting for this period(ms) once the call-rate is exceeded.\n 0 means rejecting only until the current window rolls over.")
+    public int control_reject_duplicated_ip_rate_block_ms = 0;
+    @ConfigDesc("Safety timeout(ms) to recover leaked in-flight count")
+    public int control_reject_duplicated_ip_inflight_timeout_ms = 30000;
+    @ConfigDesc("Max entry count of the duplication check table (LRU)")
+    public int control_reject_duplicated_ip_max_keep_count = 10000;
+    @ConfigDesc("Service url patterns to exclude from the check.\n ex) /health,/api/push/*")
+    public String control_reject_duplicated_ip_exclude_url_patterns = "";
+    @ConfigDesc("Client ips to exclude from the check")
+    public String control_reject_duplicated_ip_exclude_ips = "127.0.0.1,0:0:0:0:0:0:0:1";
+    @ConfigDesc("Reject text of duplicated ip control")
+    public String control_reject_duplicated_ip_text = "duplicated request!!";
+    @ConfigDesc("Activating reject URL of duplicated ip control")
+    public boolean control_reject_duplicated_ip_redirect_url_enabled = false;
+    @ConfigDesc("Reject URL of duplicated ip control")
+    public String control_reject_duplicated_ip_redirect_url = "/error.html";
+    @ConfigDesc("Send alert when a request is rejected by duplicated ip control")
+    public boolean control_reject_duplicated_ip_alert_enabled = false;
+
+    //Control - central(collector managed) reject control
+    @ConfigDesc("Accept centrally managed reject policy and block list from the collector")
+    public boolean control_reject_central_enabled = false;
+    @ConfigDesc("Max buffered detections waiting for the collector to pick up")
+    public int control_reject_central_max_pending_detection = 1000;
+
     // Counter
     @ConfigDesc("Activating collect counter")
     public boolean counter_enabled = true;
@@ -1116,6 +1158,41 @@ public class Configure extends Thread {
         this.control_reject_redirect_url_enabled = getBoolean("control_reject_redirect_url_enabled", false);
         this.control_reject_text = getValue("control_reject_text", "too many request!!");
         this.control_reject_redirect_url = getValue("control_reject_redirect_url", "/error.html");
+
+        this.control_reject_duplicated_ip_enabled = getBoolean("control_reject_duplicated_ip_enabled", false);
+        this.control_reject_duplicated_ip_url_enabled = getBoolean("control_reject_duplicated_ip_url_enabled", true);
+        this.control_reject_duplicated_ip_interval_ms = getInt("control_reject_duplicated_ip_interval_ms", 1000);
+        this.control_reject_duplicated_ip_concurrent_enabled = getBoolean("control_reject_duplicated_ip_concurrent_enabled", true);
+        this.control_reject_duplicated_ip_max_concurrent_count = getInt("control_reject_duplicated_ip_max_concurrent_count", 1);
+        if (this.control_reject_duplicated_ip_max_concurrent_count < 1) {
+            this.control_reject_duplicated_ip_max_concurrent_count = 1;
+        }
+        this.control_reject_duplicated_ip_rate_enabled = getBoolean("control_reject_duplicated_ip_rate_enabled", false);
+        this.control_reject_duplicated_ip_rate_window_ms = getInt("control_reject_duplicated_ip_rate_window_ms", 10000);
+        if (this.control_reject_duplicated_ip_rate_window_ms < 1) {
+            this.control_reject_duplicated_ip_rate_window_ms = 1;
+        }
+        this.control_reject_duplicated_ip_rate_max_count = getInt("control_reject_duplicated_ip_rate_max_count", 300);
+        if (this.control_reject_duplicated_ip_rate_max_count < 1) {
+            this.control_reject_duplicated_ip_rate_max_count = 1;
+        }
+        this.control_reject_duplicated_ip_rate_block_ms = getInt("control_reject_duplicated_ip_rate_block_ms", 0);
+        this.control_reject_duplicated_ip_inflight_timeout_ms = getInt("control_reject_duplicated_ip_inflight_timeout_ms", 30000);
+        this.control_reject_duplicated_ip_max_keep_count = getInt("control_reject_duplicated_ip_max_keep_count", 10000);
+        if (this.control_reject_duplicated_ip_max_keep_count < 100) {
+            this.control_reject_duplicated_ip_max_keep_count = 100;
+        }
+        this.control_reject_duplicated_ip_exclude_url_patterns = getValue("control_reject_duplicated_ip_exclude_url_patterns", "");
+        this.control_reject_duplicated_ip_exclude_ips = getValue("control_reject_duplicated_ip_exclude_ips", "127.0.0.1,0:0:0:0:0:0:0:1");
+        this.control_reject_duplicated_ip_text = getValue("control_reject_duplicated_ip_text", "duplicated request!!");
+        this.control_reject_duplicated_ip_redirect_url_enabled = getBoolean("control_reject_duplicated_ip_redirect_url_enabled", false);
+        this.control_reject_duplicated_ip_redirect_url = getValue("control_reject_duplicated_ip_redirect_url", "/error.html");
+        this.control_reject_duplicated_ip_alert_enabled = getBoolean("control_reject_duplicated_ip_alert_enabled", false);
+        this.control_reject_central_enabled = getBoolean("control_reject_central_enabled", false);
+        this.control_reject_central_max_pending_detection = getInt("control_reject_central_max_pending_detection", 1000);
+        if (this.control_reject_central_max_pending_detection < 1) {
+            this.control_reject_central_max_pending_detection = 1;
+        }
 
         this.profile_step_max_count = getInt("profile_step_max_count", 1024);
         if (this.profile_step_max_count < 128)
