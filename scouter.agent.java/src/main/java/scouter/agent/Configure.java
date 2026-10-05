@@ -607,6 +607,10 @@ public class Configure extends Thread {
     @ConfigValueType(ValueType.COMMA_SEPARATED_VALUE)
     public String hook_context_classes = "javax/naming/InitialContext";
 
+    @ConfigDesc("Class names excluded from all bytecode instrumentation")
+    @ConfigValueType(ValueType.COMMA_SEPARATED_VALUE)
+    public String hook_class_exclude_classes = "";
+
     @ConfigDesc("Method set for method hooking")
     @ConfigValueType(ValueType.COMMA_SEPARATED_VALUE)
     public String hook_method_patterns = "";
@@ -912,6 +916,7 @@ public class Configure extends Thread {
     private String[] _hook_method_ignore_prefix = null;
     private int _hook_method_ignore_prefix_len = 0;
     private int hook_signature;
+    private StringSet _hook_class_exclude_classes = new StringSet();
     private StringSet _hook_method_ignore_classes = new StringSet();
     private int enduser_perf_endpoint_hash = HashUtil.hash(enduser_trace_endpoint_url);
     private StringSet custom_jmx_set = new StringSet();
@@ -1077,6 +1082,9 @@ public class Configure extends Thread {
         this._log_datasource_lookup_enabled = getBoolean("_log_datasource_lookup_enabled", true);
         this.profile_connection_open_enabled = getBoolean("profile_connection_open_enabled", true);
         this._summary_connection_leak_fullstack_enabled = getBoolean("_summary_connection_leak_fullstack_enabled", false);
+        this.hook_class_exclude_classes = getValue("hook_class_exclude_classes", "");
+        this._hook_class_exclude_classes = new StringSet(StringUtil.tokenizer(
+            this.hook_class_exclude_classes.replace('.', '/'), ","));
         this.hook_method_patterns = getValue("hook_method_patterns", "");
         this.hook_method_exclude_patterns = getValue("hook_method_exclude_patterns", "");
         this.hook_method_access_public_enabled = getBoolean("hook_method_access_public_enabled", true);
@@ -1518,6 +1526,10 @@ public class Configure extends Thread {
 
     public StringSet getCustomJmxSet() {
         return this.custom_jmx_set;
+    }
+
+    public boolean isHookClassExcluded(String classname) {
+        return _hook_class_exclude_classes.hasKey(classname);
     }
 
     public boolean isIgnoreMethodClass(String classname) {
